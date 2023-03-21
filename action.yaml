@@ -1,0 +1,30 @@
+name: 'send-to-zpmhub'
+
+inputs:
+  token:
+    description: 'apikey token of zpmhub'
+    required: true
+  repository:
+    description: 'repository of your project'
+    required: true
+  url:
+    description: 'host of zpmhub'
+    required: true
+    default: 'https://zpmhub/api'
+
+on:
+  push:
+    branches:
+      - "master"
+
+runs:
+  steps:
+    - name: 'Send to ZPMHUB'
+      shell: bash
+      run: |
+        curl --location '${{ inputs.url }}/packages' \
+        --header 'apikey: ${{ inputs.token }}' \
+        --header 'Content-Type: application/json' \
+        --data '{
+            "repository": "${{ inputs.repository }}"
+        }'"
